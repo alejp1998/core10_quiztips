@@ -157,7 +157,6 @@ router.delete('/quizzes/:quizId(\\d+)/tips/:tipId(\\d+)',
     quizController.adminOrAuthorRequired,
     tipController.destroy);
 
-
 // Routes for the resource favourites of a user
 router.put('/users/:userId(\\d+)/favourites/:quizId(\\d+)',
     sessionController.loginRequired,

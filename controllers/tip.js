@@ -9,7 +9,11 @@ exports.load = (req, res, next, tipId) => {
     .then(tip => {
         if (tip) {
             req.tip = tip;
-            next();
+            models.user.findOne({where: {author: tip.author}})
+            .then(user => {
+                req.user = user;
+                next();
+            });
         } else {
             next(new Error('There is no tip with tipId=' + tipId));
         }
@@ -40,14 +44,47 @@ exports.limitPerQuiz = (req, res, next) => {
     });
 };
 
+// MW that allows actions only if the user logged in is admin or is the author of the tip.
+exports.adminOrAuthorRequired = (req, res, next) => {
+
+    const isAdmin  = !!req.session.user.isAdmin;
+    const isAuthor = req.tip.authorId === req.session.user.id;
+
+    if (isAdmin || isAuthor) {
+        next();
+    } else {
+        console.log('Prohibited operation: The logged in user is not the author of the tip, nor an administrator.');
+        res.send(403);
+    }
+};
+
+// GET /quizzes/:quizId/tips/:tipId/edit
+exports.edit = (req, res, next) => {
+    const quiz = req.quiz;
+    const tip = req.tip;
+    if(!tip || !quiz){
+        req.flash('error','El quiz o el tip no se cargaron correctamente');
+        return res.redirect("back");
+    }
+    res.render('tips/edit', {quiz, tip});
+};
+
+// PUT /quizzes/:quizId/tips/:tipId
+exports.update = (req, res, next) => {
+
+};
 
 // POST /quizzes/:quizId/tips
 exports.create = (req, res, next) => {
- 
+    if(!req.session.user){
+        req.flash('error','No user logged in');
+        res.redirect("back");
+    }
     const tip = models.tip.build(
         {
             text: req.body.text,
-            quizId: req.quiz.id
+            quizId: req.quiz.id,
+            author: req.session.user.name
         });
 
     tip.save()
