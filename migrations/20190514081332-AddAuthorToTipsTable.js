@@ -10,6 +10,6 @@ module.exports = {
   },
 
   down: function (queryInterface, Sequelize) {
-    return queryInterface.removeColumn('quizzes', 'authorId');
+    return queryInterface.removeColumn('tips', 'authorId');
   }
 };

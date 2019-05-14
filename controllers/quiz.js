@@ -45,8 +45,12 @@ exports.load = (req, res, next, quizId) => {
     models.quiz.findByPk(quizId, options)
     .then(quiz => {
         if (quiz) {
-            req.quiz = quiz;
-            next();
+            models.tip.findAll({where: {quizId: quiz.id},include: [{model: models.user, as:'author'}]})
+            .then(tips => {
+                quiz.tips = tips;
+                req.quiz = quiz;
+                next();
+            });
         } else {
             throw new Error('There is no quiz with id=' + quizId);
         }

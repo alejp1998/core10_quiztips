@@ -5,15 +5,18 @@ const {models} = require("../models");
 // Autoload the tip with id equals to :tipId
 exports.load = (req, res, next, tipId) => {
 
-    models.tip.findByPk(tipId)
+    const options = {
+        include: [
+            {model: models.user, as: 'author'},
+            {model: models.quiz, as: 'quiz'}
+        ]
+    };
+
+    models.tip.findByPk(tipId,options)
     .then(tip => {
         if (tip) {
             req.tip = tip;
-            models.user.findOne({where: {author: tip.author}})
-            .then(user => {
-                req.user = user;
-                next();
-            });
+            next();
         } else {
             next(new Error('There is no tip with tipId=' + tipId));
         }
@@ -84,7 +87,7 @@ exports.create = (req, res, next) => {
         {
             text: req.body.text,
             quizId: req.quiz.id,
-            author: req.session.user.name
+            authorId: req.session.user.id
         });
 
     tip.save()
