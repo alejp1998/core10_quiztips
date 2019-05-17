@@ -25,8 +25,10 @@ exports.load = (req, res, next, quizId) => {
 
     const options = {
         include: [
-            models.tip,
-            models.attachment,
+            {
+                model: models.tip,
+                include: [{model: models.user, as: 'author'}]
+            },
             {model: models.user, as: 'author'}
         ]
     };
@@ -45,12 +47,8 @@ exports.load = (req, res, next, quizId) => {
     models.quiz.findByPk(quizId, options)
     .then(quiz => {
         if (quiz) {
-            models.tip.findAll({where: {quizId: quiz.id},include: [{model: models.user, as:'author'}]})
-            .then(tips => {
-                quiz.tips = tips;
-                req.quiz = quiz;
-                next();
-            });
+            req.quiz = quiz;
+            next();
         } else {
             throw new Error('There is no quiz with id=' + quizId);
         }

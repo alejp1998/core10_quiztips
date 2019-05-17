@@ -8,7 +8,10 @@
         <% var isAdmin = session.user && session.user.isAdmin; %>
         <% var isQuizAuthor = session.user && quizAuthorId && quizAuthorId === session.user.id; %>
 
-        <% if (accepted || isAdmin || isQuizAuthor) { %>
+        <% var isTipAuthor = session.user && tip.authorId === session.user.id; %>
+
+
+    <% if (accepted || isAdmin || isQuizAuthor) { %>
 
               <table>
                   <tr>
@@ -26,7 +29,7 @@
 
                         <% } %>
 
-                        <% if (isAdmin || isQuizAuthor) { %>
+                        <% if (isAdmin || isTipAuthor) { %>
                                 <a href="/quizzes/<%= quizId %>/tips/<%= tip.id %>?_method=DELETE"
                                 class="button">Delete</a>
                                 <a href="/quizzes/<%= quizId %>/tips/<%= tip.id %>/edit"

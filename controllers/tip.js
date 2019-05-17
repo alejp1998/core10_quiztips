@@ -74,7 +74,8 @@ exports.edit = (req, res, next) => {
 
 // PUT /quizzes/:quizId/tips/:tipId
 exports.update = (req, res, next) => {
-
+    const {tip,quiz,body} = req;
+    
 };
 
 // POST /quizzes/:quizId/tips
