@@ -63,8 +63,7 @@ exports.adminOrAuthorRequired = (req, res, next) => {
 
 // GET /quizzes/:quizId/tips/:tipId/edit
 exports.edit = (req, res, next) => {
-    const quiz = req.quiz;
-    const tip = req.tip;
+    const {quiz,tip} = req;
     if(!tip || !quiz){
         req.flash('error','El quiz o el tip no se cargaron correctamente');
         return res.redirect("back");
@@ -74,8 +73,25 @@ exports.edit = (req, res, next) => {
 
 // PUT /quizzes/:quizId/tips/:tipId
 exports.update = (req, res, next) => {
-    const {tip,quiz,body} = req;
-    
+    const {tip,body} = req;
+    tip.text = body.text;
+    tip.accepted = false;
+
+    updatedTip.save({fields: ["text","accepted"]})
+        .then(tip => {
+            req.flash('success', 'Tip updated successfully.');
+            res.redirect("back");
+        })
+        .catch(Sequelize.ValidationError, error => {
+            req.flash('error', 'There are errors in the form:');
+            error.errors.forEach(({message}) => req.flash('error', message));
+            res.redirect("back");
+        })
+        .catch(error => {
+            req.flash('error', 'Error  updating the tip: ' + error.message);
+            next(error);
+        });
+
 };
 
 // POST /quizzes/:quizId/tips
