@@ -17,8 +17,10 @@ router.use('/api', apiRouter);
 router.use(/^(?!\/api\/)/, quizRouter);
 
 //Tip edit
-router.get('/quizzes/:quizId(\\d+)/tips/:tipId(\\d+)/edit',sessionController.loginRequired , tipController.edit);
-router.put('/quizzes/:quizId(\\d+)/tips/:tipId(\\d+)', sessionController.loginRequired , tipController.update);
+router.get('/quizzes/:quizId(\\d+)/tips/:tipId(\\d+)/edit', sessionController.loginRequired ,
+tipController.adminOrAuthorRequired , tipController.edit);
+router.put('/quizzes/:quizId(\\d+)/tips/:tipId(\\d+)', sessionController.loginRequired , 
+tipController.adminOrAuthorRequired ,tipController.update);
 
 
 

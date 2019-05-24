@@ -7,8 +7,7 @@ exports.load = (req, res, next, tipId) => {
 
     const options = {
         include: [
-            {model: models.user, as: 'author'},
-            {model: models.quiz, as: 'quiz'}
+            {model: models.user, as: 'author'}
         ]
     };
 
@@ -74,8 +73,8 @@ exports.edit = (req, res, next) => {
 // PUT /quizzes/:quizId/tips/:tipId
 exports.update = (req, res, next) => {
     const {tip,body} = req;
-    tip.text = body.text;
-    tip.accepted = false;
+    updatedTip.text = body.text;
+    updatedTip.accepted = false;
 
     updatedTip.save({fields: ["text","accepted"]})
         .then(tip => {

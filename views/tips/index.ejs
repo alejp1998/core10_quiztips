@@ -30,11 +30,12 @@
                         <% } %>
 
                         <% if (isAdmin || isTipAuthor) { %>
-                                <a href="/quizzes/<%= quizId %>/tips/<%= tip.id %>?_method=DELETE"
-                                class="button">Delete</a>
                                 <a href="/quizzes/<%= quizId %>/tips/<%= tip.id %>/edit"
                                 class="button">Edit</a>
                         <% } %>
+
+                        <% if (isAdmin || isQuizAuthor) { %>
+                                <a href="/quizzes/<%= quizId %>/tips/<%= tip.id %>?_method=DELETE"
                       </td>
                   </tr>
               </table>
