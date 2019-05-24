@@ -5,11 +5,7 @@ const {models} = require("../models");
 // Autoload the tip with id equals to :tipId
 exports.load = (req, res, next, tipId) => {
 
-    const options = {
-        include: [
-            {model: models.user, as: 'author'}
-        ]
-    };
+    const options = { include: [{model: models.user, as: 'author'}] };
 
     models.tip.findByPk(tipId,options)
     .then(tip => {
@@ -72,14 +68,14 @@ exports.edit = (req, res, next) => {
 
 // PUT /quizzes/:quizId/tips/:tipId
 exports.update = (req, res, next) => {
-    const {tip,body} = req;
-    updatedTip.text = body.text;
-    updatedTip.accepted = false;
+    let {tip,body} = req;
+    tip.text = body.text;
+    tip.accepted = false;
 
-    updatedTip.save({fields: ["text","accepted"]})
+    tip.save({fields: ["text","accepted"]})
         .then(tip => {
             req.flash('success', 'Tip updated successfully.');
-            res.redirect("back");
+            res.redirect('/quizzes/' + req.params.quizId);
         })
         .catch(Sequelize.ValidationError, error => {
             req.flash('error', 'There are errors in the form:');

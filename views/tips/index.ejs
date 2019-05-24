@@ -35,7 +35,9 @@
                         <% } %>
 
                         <% if (isAdmin || isQuizAuthor) { %>
-                                <a href="/quizzes/<%= quizId %>/tips/<%= tip.id %>?_method=DELETE"
+                                <a href="/quizzes/<%= quizId %>/tips/<%= tip.id %>?_method=DELETE">
+                        <% } %>
+
                       </td>
                   </tr>
               </table>

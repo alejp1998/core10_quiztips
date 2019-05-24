@@ -7,6 +7,7 @@ const quizRouter = require('./quiz');
 const apiRouter = require('./api');
 
 const tipController = require('../controllers/tip');
+const quizController = require('../controllers/quiz');
 const sessionController = require('../controllers/session');
 
 
@@ -21,6 +22,10 @@ router.get('/quizzes/:quizId(\\d+)/tips/:tipId(\\d+)/edit', sessionController.lo
 tipController.adminOrAuthorRequired , tipController.edit);
 router.put('/quizzes/:quizId(\\d+)/tips/:tipId(\\d+)', sessionController.loginRequired , 
 tipController.adminOrAuthorRequired ,tipController.update);
+
+//Tip and quiz autoload
+router.param('quizId', quizController.load);
+router.param('tipId',  tipController.load);
 
 
 
